@@ -76,26 +76,38 @@ class productManager{
             return error
         }
     }
-    async updateProduct(idProducto){
+    async updateProduct(idProducto,obj){
         try{
             const productos = await this.getProducts();
             const producto = productos.find(u=>u.id === idProducto)
-            if(producto){
-                console.log("Hola")
-                console.log(productos.indexof(u=>u.id === idProducto));
-                // const newArrayproductos = productos.indexof(u=>u.id === idProducto)
+            // console.log(producto)
+            if (producto){
+                let indice = await this.calculaIndice(productos,idProducto)
+                console.log(indice)
+                for(const property in obj){
+                    productos[indice][`${property}`] = obj[`${property}`];
+                    console.log(productos[indice][`${property}`]);
+                }
+                await fs.promises.writeFile(this.path,JSON.stringify(productos))
+                .then(()=>console.log(`Producto ${idProducto} actualizado con exito`))
+                .catch(error=>console.log(error))
 
-                // await fs.promises.writeFile(this.path,JSON.stringify(newArrayproductos))
-                // .then(()=>console.log(`producto ${idProducto} eliminado con exito`))
-                // .catch(error=>console.log(error))
-                
-            }else{
+            }
+            else{
                 return 'producto no existe'
             }
         }
         catch(error){
             return error
         }
+    }
+
+    async calculaIndice (productos,idProducto) {
+        for (let i = 0; i < productos.length; i++) {
+            if (productos[i].id === idProducto) {
+                return i;
+            }
+        } 
     }
 
     
@@ -137,6 +149,16 @@ const product4 = {
     stock: 56
 }
 
+const product1actulizado = {
+    title: 'Procesador Intel Celeron G4900 3.10GHz Socket 1151 OEM Coffe Lake',
+    description: 'Procesador',
+    price: 26600,
+    thumbnail: 'https://static-geektopia.com/storage/t/i/535/53506/9b3da83b7fb28625e02195fac.webp',
+    code: 54,
+    stock: 48
+}
+
+
 
 
 async function test(){
@@ -152,7 +174,7 @@ async function test(){
     // console.log(await producto1.getProductsbyID(2))
     // await producto1.deleteProduct(2)
 
-    await producto1.updateProduct(2)
+    await producto1.updateProduct(1,product1actulizado)
 }
 
 test()
