@@ -69,7 +69,7 @@ class productManager{
                 .catch(error=>console.log(error))
                 
             }else{
-                return 'producto no existe'
+                return console.log('producto no existe')
             }
         }
         catch(error){
@@ -86,7 +86,7 @@ class productManager{
                 console.log(indice)
                 for(const property in obj){
                     productos[indice][`${property}`] = obj[`${property}`];
-                    console.log(productos[indice][`${property}`]);
+                    console.log(`Propiedad ${property} actualizada a: ${obj[`${property}`]}`);
                 }
                 await fs.promises.writeFile(this.path,JSON.stringify(productos))
                 .then(()=>console.log(`Producto ${idProducto} actualizado con exito`))
@@ -155,7 +155,7 @@ const product1actulizado = {
     price: 26600,
     thumbnail: 'https://static-geektopia.com/storage/t/i/535/53506/9b3da83b7fb28625e02195fac.webp',
     code: 54,
-    stock: 48
+    stock: 45
 }
 
 
@@ -171,8 +171,10 @@ async function test(){
     
     // const producto1consulta = await producto1.getProducts()
     // console.log(producto1consulta)
+
     // console.log(await producto1.getProductsbyID(2))
-    // await producto1.deleteProduct(2)
+
+    // await producto1.deleteProduct(3)
 
     await producto1.updateProduct(1,product1actulizado)
 }
